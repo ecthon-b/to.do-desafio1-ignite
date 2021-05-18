@@ -3,6 +3,7 @@ import { useState } from 'react'
 import '../styles/tasklist.scss'
 
 import { FiTrash, FiCheckSquare } from 'react-icons/fi'
+import { useEffect } from 'react';
 
 interface Task {
   id: number;
@@ -11,8 +12,7 @@ interface Task {
 }
 
 export function TaskList() {
-  const [ids, setIds] = useState<number>(0);
-
+  
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskTitle, setNewTaskTitle] = useState('');
 
@@ -21,7 +21,7 @@ export function TaskList() {
     
     if(!newTaskTitle) return alert("Campo obrigatório");
     const task: Task = {
-      id: ids,
+      id: Math.random(),
       title: newTaskTitle,
       isComplete: false 
     }
@@ -32,10 +32,17 @@ export function TaskList() {
 
   function handleToggleTaskCompletion(id: number) {
     // Altere entre `true` ou `false` o campo `isComplete` de uma task com dado ID
-  }
+    const toggleTaskCompletion = tasks.map(task => task.id === id ? {
+      ...task, isComplete: !task.isComplete
+    } : task);
 
+    setTasks(toggleTaskCompletion);
+  }
+    
   function handleRemoveTask(id: number) {
     // Remova uma task da listagem pelo ID
+    const removeTask = tasks.filter(task => task.id !== id);
+    setTasks(removeTask);
   }
 
   return (
